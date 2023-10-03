@@ -1,23 +1,38 @@
 import { useState } from 'react'
+import { Todo } from '../../@types/todo.type'
 import styles from './taskInput.module.scss'
 
 interface TaskInputProps {
     addTodo: (name: string) => void
+    editTodo: (name: string) => void
+    finishEditTodo: () => void
+    currentTodo: Todo | null
 }
 
 export default function TaskInput(props: TaskInputProps) {
-    const { addTodo } = props
+    const { addTodo, currentTodo, editTodo, finishEditTodo } = props
     const [name, setName] = useState<string>('')
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        addTodo(name)
-        setName('')
-    }
+
+        if (currentTodo) {
+          finishEditTodo()
+          if (name) setName('')
+        } else {
+          addTodo(name)
+          setName('')
+        }
+      }
+
 
     const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target
-        setName(value)
+        if (currentTodo) {
+            editTodo(value)
+        } else {
+            setName(value)
+        }
     }
 
     return (
@@ -27,10 +42,10 @@ export default function TaskInput(props: TaskInputProps) {
                 <input
                     type='text'
                     placeholder='caption goes here'
-                    value={name}
+                    value={currentTodo ? currentTodo.name : name}
                     onChange={onChangeInput}
                 />
-                <button type='submit'>➕</button>
+                <button type='submit'>{currentTodo ? '✔️' : '➕'}</button>
             </form>
         </div>
     )

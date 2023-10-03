@@ -6,6 +6,7 @@ import styles from './todoList.module.scss'
 
 export default function TodoList() {
     const [todos, setTodos] = useState<Todo[]>([])
+    const [currentTodo, setCurrentTodo] = useState<Todo | null>(null)
 
     const doneTodos = todos.filter((todo) => todo.done)
     const notdoneTodos = todos.filter((todo) => !todo.done)
@@ -30,19 +31,57 @@ export default function TodoList() {
         })
     }
 
+    const startEditTodo = (id: string) => {
+        const findedTodo = todos.find((todo) => todo.id === id)
+
+        if (findedTodo) {
+            setCurrentTodo(findedTodo)
+        }
+    }
+
+    const editTodo = (name: string) => {
+        setCurrentTodo((prev) => {
+            if (prev) return { ...prev, name }
+            return null
+        })
+    }
+
+    const finishEditTodo = () => {
+        setTodos((prev) => {
+            return prev.map((todo) => {
+                if (todo.id === (currentTodo as Todo).id) {
+                    return currentTodo as Todo
+                }
+                return todo
+            })
+        })
+        setCurrentTodo(null)
+    }
+
     console.log(todos)
     return (
         <div className={styles.todoList}>
             <div className={styles.todoListContainer}>
-                <TaskInput addTodo={addTodo} />
+
+                <TaskInput
+                    addTodo={addTodo}
+                    currentTodo={currentTodo}
+                    editTodo={editTodo}
+                    finishEditTodo={finishEditTodo}
+
+                />
+
                 <TaskList
                     todos={notdoneTodos}
                     handleDoneTodo={handleDoneTodo}
+                    startEditTodo={startEditTodo}
                 />
+
                 <TaskList
                     doneTaskList
                     todos={doneTodos}
                     handleDoneTodo={handleDoneTodo}
+                    startEditTodo={startEditTodo}
                 />
             </div>
         </div>
