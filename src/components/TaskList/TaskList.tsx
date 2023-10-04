@@ -33,6 +33,7 @@ export default function TaskList(props: TaskListProps) {
                             checked={todo.done}
                             onChange={onChangeCheckbox(todo.id)}
                         />
+
                         <span
                             className={`${styles.taskName} ${
                                 todo.done ? styles.taskNameDone : ''
@@ -40,6 +41,7 @@ export default function TaskList(props: TaskListProps) {
                         >
                             {todo.name}
                         </span>
+
                         <div className={styles.taskActions}>
                             <button
                                 className={styles.taskBtn}
@@ -47,7 +49,12 @@ export default function TaskList(props: TaskListProps) {
                             >
                                 🖊️
                             </button>
-                            <button className={styles.taskBtn}  onClick={() => deleteTodo(todo.id)}>🗑️</button>
+                            <button
+                                className={styles.taskBtn}
+                                onClick={() => deleteTodo(todo.id)}
+                            >
+                                🗑️
+                            </button>
                         </div>
                     </div>
                 ))}

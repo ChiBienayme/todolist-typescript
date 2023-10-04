@@ -5,26 +5,26 @@ import styles from './taskInput.module.scss'
 interface TaskInputProps {
     addTodo: (name: string) => void
     editTodo: (name: string) => void
-    finishEditTodo: () => void
     currentTodo: Todo | null
+    finishedTodo: () => void
+
 }
 
 export default function TaskInput(props: TaskInputProps) {
-    const { addTodo, currentTodo, editTodo, finishEditTodo } = props
+    const { addTodo, editTodo, currentTodo, finishedTodo} = props
     const [name, setName] = useState<string>('')
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-
         if (currentTodo) {
-          finishEditTodo()
-          if (name) setName('')
+            finishedTodo()
+            if (name) setName('')
         } else {
-          addTodo(name)
-          setName('')
-        }
-      }
+            addTodo(name)
+            setName('')
 
+        }
+    }
 
     const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target
@@ -32,13 +32,14 @@ export default function TaskInput(props: TaskInputProps) {
             editTodo(value)
         } else {
             setName(value)
+
         }
     }
 
-    
     return (
         <div className='mb-2'>
             <h1 className={styles.title}>To do list typescript</h1>
+
             <form className={styles.form} onSubmit={handleSubmit}>
                 <input
                     type='text'
