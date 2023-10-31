@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import { Todo } from '../../@types/todo.type'
-import connect, { InjectedType } from '../../HOC/connect'
+import connect from '../../HOC/connect'
 import { TodoTypes } from '../../PropTypes/todo.proptypes'
 import styles from './taskList.module.scss'
 
-interface TaskListProps extends InjectedType {
+interface TaskListProps {
     doneTaskList?: boolean
     todos: Todo[]
     handleDoneTodo: (id: string, done: boolean) => void
@@ -12,7 +12,7 @@ interface TaskListProps extends InjectedType {
     deleteTodo: (id: string) => void
 }
 
-function TaskList(props: TaskListProps) {
+function TaskList(props: TaskListProps & typeof injectedProps) {
     const { doneTaskList, todos, handleDoneTodo, startEditTodo, deleteTodo } =
         props
 
@@ -71,4 +71,5 @@ TaskList.propTypes = {
     deleteTodo: PropTypes.func.isRequired,
 }
 
-export default connect({ user: { name: 'duoc' } })(TaskList)
+const injectedProps = { user: { name: 'Chi' } }
+export default connect(injectedProps)(TaskList)
